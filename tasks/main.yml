@@ -1,2 +1,59 @@
 ---
-# tasks file for ansible-role-skeleton/
+- name: Install Gitea Server
+  become: true
+  tags: install
+  block:
+
+    - name: Add 'gitea' user
+      ansible.builtin.user:
+        name: gitea
+        group: development
+
+    - name: Allow web
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 3000
+      notify: reload ufw
+
+    - name: Allow git SSH
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 2222
+      notify: reload ufw
+
+    - name: Create data directory
+      ansible.builtin.file:
+        path: "{{ gitea_data }}"
+        state: directory
+        mode: 0775
+        owner: gitea
+        group: development
+
+    - name: Create config directory
+      ansible.builtin.file:
+        path: "{{ gitea_config }}"
+        state: directory
+        mode: 0775
+        owner: gitea
+        group: development
+
+    - name: Instantiate passwd database
+      getent:
+        database: passwd
+
+    - name: Create Gitea container
+      community.docker.docker_container:
+        name: gitea
+        image: gitea/gitea:latest-rootless
+        user: "{{ getent_passwd['gitea'].1 }}:{{ getent_passwd['gitea'].2 }}"
+        restart_policy: unless-stopped
+        volumes:
+          - "{{ gitea_data }}:/var/lib/gitea"
+          - "{{ gitea_config }}:/etc/gitea"
+          - /etc/timezone:/etc/timezone:ro
+          - /etc/localtime:/etc/localtime:ro
+        ports:
+          - "3000:3000"
+          - "2222:2222"
