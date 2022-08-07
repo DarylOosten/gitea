@@ -36,8 +36,8 @@
         user: "{{ getent_passwd['gitea'].1 }}:{{ getent_passwd['gitea'].2 }}"
         restart_policy: unless-stopped
         volumes:
-          - "{{ gitea_data }}:/var/lib/gitea"
-          - "{{ gitea_config }}:/etc/gitea"
+          - /home/gitea/data:/var/lib/gitea
+          - /home/gitea/config:/etc/gitea
           - /etc/timezone:/etc/timezone:ro
           - /etc/localtime:/etc/localtime:ro
         ports:
