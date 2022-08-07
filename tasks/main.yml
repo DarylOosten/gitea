@@ -9,23 +9,9 @@
         name: gitea
         group: development
 
-    - name: Allow web
-      become: true
-      community.general.ufw:
-        rule: allow
-        port: 3000
-      notify: reload ufw
-
-    - name: Allow git SSH
-      become: true
-      community.general.ufw:
-        rule: allow
-        port: 2222
-      notify: reload ufw
-
     - name: Create data directory
       ansible.builtin.file:
-        path: "{{ gitea_data }}"
+        path: /home/gitea/data
         state: directory
         mode: 0775
         owner: gitea
@@ -33,7 +19,7 @@
 
     - name: Create config directory
       ansible.builtin.file:
-        path: "{{ gitea_config }}"
+        path: /home/gitea/config
         state: directory
         mode: 0775
         owner: gitea
@@ -57,3 +43,17 @@
         ports:
           - "3000:3000"
           - "2222:2222"
+
+    - name: Allow web
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 3000
+      notify: reload ufw
+
+    - name: Allow git SSH
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 2222
+      notify: reload ufw
