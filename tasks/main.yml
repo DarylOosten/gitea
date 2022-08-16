@@ -33,6 +33,7 @@
       community.docker.docker_container:
         name: gitea
         image: gitea/gitea:latest-rootless
+        pull: true
         user: "{{ getent_passwd['gitea'].1 }}:{{ getent_passwd['gitea'].2 }}"
         restart_policy: unless-stopped
         volumes:
