@@ -45,13 +45,6 @@
           - "3000:3000"
           - "2222:2222"
 
-    - name: Allow web
-      become: true
-      community.general.ufw:
-        rule: allow
-        port: 3000
-      notify: reload ufw
-
     - name: Allow git SSH
       become: true
       community.general.ufw:
