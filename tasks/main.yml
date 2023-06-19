@@ -4,10 +4,31 @@
   tags: install
   block:
 
+    - name: Add 'gitea' group
+      ansible.builtin.group:
+        name: gitea
+        state: present
+
+    - name: Add Ansible user to gitea
+      ansible.builtin.user:
+        name: "{{ user }}"
+        groups: gitea
+        append: true
+
     - name: Add 'gitea' user
       ansible.builtin.user:
         name: gitea
-        group: development
+        group: gitea
+
+    - name: Copy nginx config file
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+      notify:
+        - restart nginx
 
     - name: Create data directory
       ansible.builtin.file:
@@ -15,7 +36,7 @@
         state: directory
         mode: 0775
         owner: gitea
-        group: development
+        group: gitea
 
     - name: Create config directory
       ansible.builtin.file:
@@ -23,7 +44,7 @@
         state: directory
         mode: 0775
         owner: gitea
-        group: development
+        group: gitea
 
     - name: Instantiate passwd database
       getent:
