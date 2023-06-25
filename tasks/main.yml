@@ -46,6 +46,14 @@
         owner: gitea
         group: gitea
 
+    - name: Copy gitea config file
+      template:
+        src: app.ini.j2
+        dest: /home/gitea/config/app.ini
+        owner: gitea
+        group: gitea
+        mode: u=rw,g=,o=
+
     - name: Instantiate passwd database
       getent:
         database: passwd
