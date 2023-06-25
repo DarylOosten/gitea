@@ -62,7 +62,7 @@ MINIMUM_KEY_SIZE_CHECK=true
 SSH_AUTHORIZED_KEYS_BACKUP=true
 SSH_CREATE_AUTHORIZED_KEYS_FILE=true
 SSH_EXPOSE_ANONYMOUS=false
-SSH_AUTHORIZED_KEYS_COMMAND_TEMPLATE={{.AppPath}} --config={{.CustomConf}} serv key-{{.Key.ID}}
+SSH_AUTHORIZED_KEYS_COMMAND_TEMPLATE={{ '{{' }}.AppPath}} --config={{ '{{' }}.CustomConf}} serv key-{{ '{{' }}.Key.ID}}
 SSH_PER_WRITE_TIMEOUT=30s
 SSH_PER_WRITE_PER_KB_TIMEOUT=10s
 SSH_USER=git
@@ -100,7 +100,7 @@ ROUTER=console
 STACKTRACE_LEVEL=none
 BUFFER_LEN=10000
 ENABLE_SSH_LOG=false
-ACCESS_LOG_TEMPLATE={{.Ctx.RemoteHost}} - {{.Identity}} {{.Start.Format "[02/Jan/2006:15:04:05 -0700]" }} "{{.Ctx.Req.Method}} {{.Ctx.Req.URL.RequestURI}} {{.Ctx.Req.Proto}}" {{.ResponseWriter.Status}} {{.ResponseWriter.Size}} "{{.Ctx.Req.Referer}}" "{{.Ctx.Req.UserAgent}}"
+ACCESS_LOG_TEMPLATE={{ '{{' }}.Ctx.RemoteHost}} - {{ '{{' }}.Identity}} {{ '{{' }}.Start.Format "[02/Jan/2006:15:04:05 -0700]" }} "{{ '{{' }}.Ctx.Req.Method}} {{ '{{' }}.Ctx.Req.URL.RequestURI}} {{ '{{' }}.Ctx.Req.Proto}}" {{ '{{' }}.ResponseWriter.Status}} {{ '{{' }}.ResponseWriter.Size}} "{{ '{{' }}.Ctx.Req.Referer}}" "{{ '{{' }}.Ctx.Req.UserAgent}}"
 REQUEST_ID_HEADERS=
 
 [security]
