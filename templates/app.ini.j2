@@ -24,7 +24,6 @@ SSH_PORT=2222
 SSH_LISTEN_PORT=2222
 BUILTIN_SSH_SERVER_USER=git
 LFS_START_SERVER=true
-LFS_CONTENT_PATH=/var/lib/gitea/git/lfs
 DOMAIN={{ fqdn }}
 LFS_JWT_SECRET=guwHGz9iSb6UlpbCpGMCCtFZBHoMIirtKjWxIzOLEMw
 OFFLINE_MODE=false
@@ -134,3 +133,6 @@ ENABLE_OPENID_SIGNUP=true
 
 [oauth2]
 JWT_SECRET=Z-mQ2TyLL-syMvD3AVapp-EhFk2kBBl9gBDLIiGen8w
+
+[lfs]
+PATH=/var/lib/gitea/git/lfs
