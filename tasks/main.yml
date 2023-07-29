@@ -75,3 +75,10 @@
         rule: allow
         port: 2222
       notify: reload ufw
+
+    - name: Allow HTTP
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 3000
+      notify: reload ufw
