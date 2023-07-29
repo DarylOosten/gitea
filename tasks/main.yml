@@ -7,6 +7,7 @@
     - name: Add 'gitea' group
       ansible.builtin.group:
         name: gitea
+        gid: "65538"
         state: present
 
     - name: Add Ansible user to gitea
@@ -18,6 +19,7 @@
     - name: Add 'gitea' user
       ansible.builtin.user:
         name: gitea
+        uid: "1035"
         group: gitea
 
     - name: Copy nginx config file
@@ -29,14 +31,6 @@
         mode: u=rw,g=r,o=r
       notify:
         - restart nginx
-
-    - name: Create data directory
-      ansible.builtin.file:
-        path: /home/gitea/data
-        state: directory
-        mode: 0775
-        owner: gitea
-        group: gitea
 
     - name: Create config directory
       ansible.builtin.file:
@@ -54,6 +48,15 @@
         group: gitea
         mode: u=rw,g=,o=
 
+    - name: Create gitea_data volume
+      docker_volume:
+        driver: "local"
+        driver_options:
+          type: nfs
+          o: "addr={{ nas }},nolock,soft,rw"
+          device: "{{ gitea_data_nfs }}"
+        volume_name: gitea_data
+
     - name: Instantiate passwd database
       getent:
         database: passwd
@@ -63,10 +66,10 @@
         name: gitea
         image: gitea/gitea:latest-rootless
         pull: true
-        user: "{{ getent_passwd['gitea'].1 }}:{{ getent_passwd['gitea'].2 }}"
+        user: "1035:65538"
         restart_policy: unless-stopped
         volumes:
-          - /home/gitea/data:/var/lib/gitea
+          - gitea_data:/var/lib/gitea
           - /home/gitea/config:/etc/gitea
           - /etc/timezone:/etc/timezone:ro
           - /etc/localtime:/etc/localtime:ro
