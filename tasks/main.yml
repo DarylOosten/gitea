@@ -22,16 +22,6 @@
         uid: "1035"
         group: gitea
 
-    - name: Copy nginx config file
-      template:
-        src: nginx.conf.j2
-        dest: /etc/nginx/nginx.conf
-        owner: root
-        group: root
-        mode: u=rw,g=r,o=r
-      notify:
-        - restart nginx
-
     - name: Create config directory
       ansible.builtin.file:
         path: /home/gitea/config
@@ -65,6 +55,8 @@
       community.docker.docker_container:
         name: gitea
         image: gitea/gitea:latest-rootless
+        networks:
+          - name: caddy_net
         pull: true
         user: "1035:65538"
         restart_policy: unless-stopped
@@ -74,8 +66,14 @@
           - /etc/timezone:/etc/timezone:ro
           - /etc/localtime:/etc/localtime:ro
         ports:
-          - "3000:3000"
           - "2222:2222"
+
+    - name: Insert/Update reverse proxy config in caddy
+      ansible.builtin.blockinfile:
+        path: /home/caddy/Caddyfile
+        block: |
+          gitea.home
+          reverse_proxy gitea:3000
 
     - name: Allow git SSH
       become: true
