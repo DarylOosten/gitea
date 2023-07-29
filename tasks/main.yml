@@ -66,14 +66,8 @@
           - /etc/timezone:/etc/timezone:ro
           - /etc/localtime:/etc/localtime:ro
         ports:
+          - "3000:3000"
           - "2222:2222"
-
-    - name: Insert/Update reverse proxy config in caddy
-      ansible.builtin.blockinfile:
-        path: /home/caddy/Caddyfile
-        block: |
-          gitea.home
-          reverse_proxy gitea:3000
 
     - name: Allow git SSH
       become: true
