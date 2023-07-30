@@ -55,8 +55,6 @@
       community.docker.docker_container:
         name: gitea
         image: gitea/gitea:latest-rootless
-        networks:
-          - name: caddy_net
         pull: true
         user: "{{ gitea_uid }}:{{ gitea_gid }}"
         restart_policy: unless-stopped
