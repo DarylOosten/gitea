@@ -7,7 +7,7 @@
     - name: Add 'gitea' group
       ansible.builtin.group:
         name: gitea
-        gid: "65538"
+        gid: "{{ gitea_gid }}"
         state: present
 
     - name: Add Ansible user to gitea
@@ -19,7 +19,7 @@
     - name: Add 'gitea' user
       ansible.builtin.user:
         name: gitea
-        uid: "1035"
+        uid: "{{ gitea_uid }}"
         group: gitea
 
     - name: Create config directory
@@ -58,7 +58,7 @@
         networks:
           - name: caddy_net
         pull: true
-        user: "1035:65538"
+        user: "{{ gitea_uid }}:{{ gitea_gid }}"
         restart_policy: unless-stopped
         volumes:
           - gitea_data:/var/lib/gitea
