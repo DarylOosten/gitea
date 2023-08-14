@@ -74,3 +74,17 @@
         rule: allow
         port: 2222
       notify: reload ufw
+
+    - name: Setup cron job to stop gitea for backup
+      ansible.builtin.cron:
+        name: "Pause gitea for backup"
+        hour: "4"
+        minute: "0"
+        job: "sudo docker stop gitea"
+
+    - name: Setup cron job to start gitea after backup
+      ansible.builtin.cron:
+        name: "Resume gitea after backup"
+        hour: "5"
+        minute: "0"
+        job: "sudo docker start gitea"
