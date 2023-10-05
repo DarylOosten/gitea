@@ -7,7 +7,6 @@
     - name: Add 'gitea' group
       ansible.builtin.group:
         name: gitea
-        gid: "{{ gitea_gid }}"
         state: present
 
     - name: Add Ansible user to gitea
@@ -19,7 +18,6 @@
     - name: Add 'gitea' user
       ansible.builtin.user:
         name: gitea
-        uid: "{{ gitea_uid }}"
         group: gitea
 
     - name: Create config directory
@@ -38,14 +36,13 @@
         group: gitea
         mode: u=rw,g=,o=
 
-    - name: Create gitea_data volume
-      docker_volume:
-        driver: "local"
-        driver_options:
-          type: nfs
-          o: "addr={{ nas }},nolock,soft,rw"
-          device: "{{ gitea_data_nfs }}"
-        volume_name: gitea_data
+    - name: Create config directory
+      ansible.builtin.file:
+        path: /home/gitea/data
+        state: directory
+        mode: 0775
+        owner: gitea
+        group: gitea
 
     - name: Instantiate passwd database
       getent:
@@ -59,7 +56,7 @@
         user: "{{ gitea_uid }}:{{ gitea_gid }}"
         restart_policy: unless-stopped
         volumes:
-          - gitea_data:/var/lib/gitea
+          - /home/gitea/data:/var/lib/gitea
           - /home/gitea/config:/etc/gitea
           - /etc/timezone:/etc/timezone:ro
           - /etc/localtime:/etc/localtime:ro
@@ -74,17 +71,3 @@
         rule: allow
         port: 2222
       notify: reload ufw
-
-    - name: Setup cron job to stop gitea for backup
-      ansible.builtin.cron:
-        name: "Pause gitea for backup"
-        hour: "4"
-        minute: "0"
-        job: "sudo docker stop gitea"
-
-    - name: Setup cron job to start gitea after backup
-      ansible.builtin.cron:
-        name: "Resume gitea after backup"
-        hour: "5"
-        minute: "0"
-        job: "sudo docker start gitea"
