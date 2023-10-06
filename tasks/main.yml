@@ -36,7 +36,7 @@
         group: gitea
         mode: u=rw,g=,o=
 
-    - name: Create config directory
+    - name: Create data directory
       ansible.builtin.file:
         path: /home/gitea/data
         state: directory
