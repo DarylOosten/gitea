@@ -17,4 +17,4 @@ dependencies:
       backup:
         user: gitea
         group: gitea
-        dirs: ['data']
+        dirs: ['data', 'config']
