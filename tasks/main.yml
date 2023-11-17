@@ -9,12 +9,6 @@
         name: gitea
         state: present
 
-    - name: Add Ansible user to gitea
-      ansible.builtin.user:
-        name: "{{ user }}"
-        groups: gitea
-        append: true
-
     - name: Add 'gitea' user
       ansible.builtin.user:
         name: gitea
