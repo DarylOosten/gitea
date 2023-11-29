@@ -62,7 +62,7 @@ MINIMUM_KEY_SIZE_CHECK = true
 SSH_AUTHORIZED_KEYS_BACKUP = true
 SSH_CREATE_AUTHORIZED_KEYS_FILE = true
 SSH_EXPOSE_ANONYMOUS = false
-SSH_AUTHORIZED_KEYS_COMMAND_TEMPLATE = {{.AppPath}} --config={{.CustomConf}} serv key-{{.Key.ID}}
+SSH_AUTHORIZED_KEYS_COMMAND_TEMPLATE = {{ '{{' }}.AppPath}} --config={{ '{{' }}.CustomConf}} serv key-{{ '{{' }}.Key.ID}}
 SSH_PER_WRITE_TIMEOUT = 30s
 SSH_PER_WRITE_PER_KB_TIMEOUT = 10s
 SSH_USER = git
