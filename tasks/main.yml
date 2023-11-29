@@ -29,6 +29,8 @@
         owner: gitea
         group: gitea
         mode: u=rw,g=,o=
+      notify:
+        - restart gitea
 
     - name: Create data directory
       ansible.builtin.file:

@@ -3,3 +3,10 @@
   become: true
   community.general.ufw:
     state: reloaded
+
+- name: restart gitea
+  become: true
+  community.docker.docker_container:
+    name: gitea
+    state: started
+    restart: true
