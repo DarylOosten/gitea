@@ -124,7 +124,13 @@ DEFAULT_ENABLE_TIMETRACKING = true
 NO_REPLY_ADDRESS = noreply.localhost
 
 [mailer]
-ENABLED = false
+ENABLED = true
+FROM = {{ gitea_smtp_from }}
+PROTOCOL = {{ gitea_smtp_protocol }}
+SMTP_ADDR = {{ gitea_smtp_addr }}
+SMTP_PORT = {{ gitea_smtp_port }}
+USER = {{ gitea_smtp_user }}
+PASSWD = {{ gitea_smtp_pass }}
 
 [openid]
 ENABLE_OPENID_SIGNIN = true
